@@ -1,0 +1,13 @@
+[Unit]
+Description=Run chronyd metrics collection every minute
+#ConditionFileIsExecutable=/usr/local/bin/chronyd_exporter.py
+#ConditionFileIsExecutable=/usr/bin/sponge
+#ConditionPathIsDirectory=/var/lib/prometheus/node-exporter
+
+
+[Timer]
+OnBootSec=0
+OnUnitActiveSec=15s
+
+[Install]
+WantedBy=timers.target

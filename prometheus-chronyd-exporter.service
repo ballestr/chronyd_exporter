@@ -1,0 +1,10 @@
+[Unit]
+Description=Collect chronyd metrics for prometheus-node-exporter
+After=chrony.service
+
+[Service]
+Type=oneshot
+Environment=TMPDIR=/var/lib/prometheus/node-exporter
+ExecStart=/bin/sh -c "/usr/local/bin/chronyd_exporter.py | sponge /var/lib/prometheus/node-exporter/chronyd.prom"
+
+[Install]

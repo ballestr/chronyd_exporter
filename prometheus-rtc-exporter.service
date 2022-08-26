@@ -1,0 +1,19 @@
+## https://pypi.org/project/gpsd-prometheus-exporter/
+## https://github.com/markopolo123/gpsd_prometheus_exporter
+
+[Unit]
+Description=Collect HW RTC stats of SBC
+Requires=hwsetup_boot.service
+#StartLimitIntervalSec=500
+#StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/rtc_metrics_rma.py
+
+Restart=on-failure
+RestartSec=15s
+
+[Install]
+WantedBy=multi-user.target
+
