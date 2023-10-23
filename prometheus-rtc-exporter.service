@@ -3,7 +3,8 @@
 
 [Unit]
 Description=Collect HW RTC stats of SBC
-Requires=hwsetup_boot.service
+## uncomment for SBCs that need HW setup
+#Requires=hwsetup_boot.service
 #StartLimitIntervalSec=500
 #StartLimitBurst=5
 

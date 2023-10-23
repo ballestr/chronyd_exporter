@@ -6,7 +6,8 @@ install -m 0744 rtc_metrics_rma.py /usr/local/bin/
 install -m 0644 prometheus-rtc-exporter.service     /etc/systemd/system/
 
 systemctl daemon-reload
-systemctl enable --now prometheus-chronyd-exporter.*
-systemctl status prometheus-chronyd-exporter.*
-systemctl enable --now prometheus-rtc-exporter.*
+systemctl enable  prometheus-chronyd-exporter.*
+systemctl restart prometheus-chronyd-exporter.*
+systemctl enable  prometheus-rtc-exporter.*
+systemctl restart prometheus-rtc-exporter.*
 systemctl status prometheus-rtc-exporter.*
