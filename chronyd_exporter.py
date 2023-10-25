@@ -52,6 +52,15 @@ def get_cmdoutput(command):
     {}'.format(command, return_code))
     return out.decode("utf-8")
 
+def get_sourcename(address):
+    if (address.startswith('GPS') or address.startswith('PPS') ): 
+        return address
+    try:
+        chrony_sourcename_cmd = ['chronyc', '-c', 'sourcename',address]
+        sourcename=get_cmdoutput(chrony_sourcename_cmd).rstrip()
+    except RuntimeError:
+        sourcename=address
+    return sourcename
 
 def printPrometheusformat(metric, values):
     print("# HELP chronyd_%s chronyd metric for %s" % (metric, metric))
@@ -77,6 +86,7 @@ def weight(value):
     return bin(val_int).count('1')/8.0
 
 def main(argv):
+    remotes = {}
     peer_status_metrics = {}
     peer_reach_metrics = {}
     offset_metrics = {}
@@ -87,7 +97,10 @@ def main(argv):
     for line in chrony_sourcestats.split('\n'):
         if (len(line)) > 0:
             x = line.split(',')
-            common_labels = "remote=\"%s\"" % (x[0])
+            remote_addr=x[0]
+            remote_name=get_sourcename(remote_addr)
+            common_labels = "remote=\"%s\",sourcename=\"%s\"" % (remote_addr,remote_name)
+            remotes[remote_addr]={'addr':remote_addr,'sourcename':remote_name,'label':common_labels}
             freq_metrics[common_labels] = float(x[4])
             freq_skew_metrics[common_labels] = float(x[5])
             std_dev_metrics[common_labels] = float(x[7])
@@ -103,7 +116,7 @@ def main(argv):
             stratum = x[3]
             reach = x[5]
             mode = metrics_mode[x[0]]
-            common_labels = "remote=\"%s\"" % (x[2])
+            common_labels = remotes[x[2]]['label']
             peer_labels = "%s,stratum=\"%s\",mode=\"%s\"" % (
                 common_labels,
                 stratum,

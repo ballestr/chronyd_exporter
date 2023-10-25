@@ -16,4 +16,12 @@ References
 # rtc-exporter: detailed RTC metrics for Prometheus node-exporter
 
 Measure the offset of one or more RTC clocks compared to system clock
-# chronyd_exporter
+
+## update 2023-10-25
+
+Added sourcename to labels - using `chronyc sourcename <address>`.  
+Does not seem to have visible impact on system load even on a low spec SBC.
+
+# Also
+
+See also https://github.com/ballestr/gpstime
